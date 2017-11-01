@@ -12,16 +12,11 @@ object Harjoitus4 extends App {
     palat(0)(0) + ". " + palat(1)
   }
 
-  // TODO: Toteuta tähän funktio muutaKaikki siten, että alla oleva
-  // koodi toimii ja tuottaa kuvatunlaisen tulosteen.
-  // muutaKaikki-funktion on siis otettava parametriksi taulukollinen
-  // merkkijonoja sekä muutosfunktio, ja vaihdettava kaikki taulukon
-  // alkiot toisiksi annettua funktiota käyttäen.
-
+  def muutaKaikki(buf: Array[String], f: String => String) = for (i <- 0 until buf.size) buf(i) = f(buf(i))
 
   val nimia = Array("Umberto Eco", "James Joyce", "Dorothy Dunnett")
   println(nimia.mkString(", "))        // tulostaa: Umberto Eco, James Joyce, Dorothy Dunnett
-  // muutaKaikki(nimia, lyhennaNimi)   // TODO: Poista kommenttimerkki rivin alusta.
+  muutaKaikki(nimia, lyhennaNimi)
   println(nimia.mkString(", "))        // pitäisi tulostaa: U. Eco, J. Joyce, D. Dunnett
 
 }

@@ -9,11 +9,10 @@ object Harjoitus1 extends App {
   // parametreina annetut rivi- ja sarakenumerot yhtä suuret.
   // Alla on sille valmiina käyttötapaus.
 
-  // TODO: kirjoita koodisi tähän väliin
+  def onLavistajalla(a: Int, b: Int) = a == b
 
-  // TODO: poista kommenttimerkit seuraavien kahden rivin alusta
-  // val totuusarvoja = Vector.tabulate(5, 5)(onLavistajalla)
-  // println(totuusarvoja.mkString("\n"))
+  val totuusarvoja = Vector.tabulate(5, 5)(onLavistajalla)
+  println(totuusarvoja.mkString("\n"))
 
   // Ohjelman tulosteeksi pitäisi tulla:
   // Vector(true, false, false, false, false)
