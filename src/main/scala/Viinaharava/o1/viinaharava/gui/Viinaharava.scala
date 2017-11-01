@@ -63,7 +63,7 @@ object Viinaharava extends SimpleSwingApplication {
     val RevealedBoozePic  = load("pictures/empty.png")
     val FullGlassPic      = load("pictures/full.png" )
     val RevealedWaterPics = (for (danger <- 0 to 8) yield load("pictures/" + danger + ".png")).toIndexedSeq
-    
+    println(this.FullGlassPic)
     private def load(picPath: String) = makeImage(picPath).map( this.scale ).map( Array(_) ).getOrElse(Array.empty) 
 
     def missingElementVisuals = RevealedWaterPics(0)
