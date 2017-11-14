@@ -10,24 +10,24 @@ package o1.robots
   * @see [[Wall]] */
 trait Square {
 
-  
+
   /** Returns `true` if the square is empty of all obstacles, `false` otherwise. */
   def isEmpty: Boolean
 
-  
-  /** Returns the robot occupying the square, wrapped in an `Option`, or `None`, 
+
+  /** Returns the robot occupying the square, wrapped in an `Option`, or `None`,
     * if there is no robot in the square. */
   def robot: Option[RobotBody]
 
-  
+
   /** Returns `true` if the square contains a permanent, unpassable obstacle, `false` otherwise. */
   def isUnpassable: Boolean
 
-  
+
   /** Removes any robot from the square (if there was one there to begin with). */
   def clear()
 
-  
+
   /** Adds the given robot to the square, if possible. If there is something
     * already in the square, a collision happens instead.
     * @param arrivee  the robot arriving in the square
@@ -37,10 +37,10 @@ trait Square {
 }
 
 
-/** The singleton object `Wall` represents walls, that is, squares that constitute unpassable 
-  * obstacles for robots. A robot can never be in the same location with a wall. 
+/** The singleton object `Wall` represents walls, that is, squares that constitute unpassable
+  * obstacles for robots. A robot can never be in the same location with a wall.
   *
-  * Since all wall locations in all robot worlds are alike and immutable, it is enough to 
+  * Since all wall locations in all robot worlds are alike and immutable, it is enough to
   * have a single `Wall` object that can be placed wherever there is an obstacle in any
   * robot world. There is no need for separate instances for each wall square. */
 object Wall extends Square {
@@ -54,17 +54,17 @@ object Wall extends Square {
   /** `true` since a wall is an unpassable obstacle */
   val isUnpassable = true
 
-  
-  /** Fails to add the given robot to the square. Instead, the robot collides 
-    * with the wall and is destroyed. 
+
+  /** Fails to add the given robot to the square. Instead, the robot collides
+    * with the wall and is destroyed.
     * @param arrivee  the robot attempting to arrive in the square
     * @return `false` since the robot's arrival failed */
   def addRobot(arrivee: RobotBody) = {
-    // TODO: implementation partially missing
+    arrivee.destroy
     false
   }
 
-  
+
   /** Does nothing, since there is no robot to remove in a wall square. */
   def clear() = {
     // no actions necessary
@@ -79,34 +79,38 @@ class Floor extends Square {
 
   private var occupant: Option[RobotBody] = None
 
-  
-  /** `false` since a floor is never considered entirely unpassable */ 
+
+  /** `false` since a floor is never considered entirely unpassable */
   val isUnpassable = false
 
-  
-  /** Returns the robot occupying the square, wrapped in an `Option`, or `None`, 
+
+  /** Returns the robot occupying the square, wrapped in an `Option`, or `None`,
     * if there is no robot in the square. */
   def robot = this.occupant
 
-  
+
   /** Returns `true` if the floor square has no robot in it, `false` otherwise. */
   def isEmpty = occupant == None
 
-  
+
   /** Removes any robot from the square (if there was one there to begin with). */
   def clear() = {
     this.occupant = None
   }
 
-  
+
   /** Adds the given robot to the floor square, if possible. The arrival will fail,
-    * if the square already had an occupant. In that case, the occupant of the 
+    * if the square already had an occupant. In that case, the occupant of the
     * square is destroyed (but the one that crashed into it stays intact).
     * @param arrivee  the robot attempting to arrive in the square
     * @return `true` if `arrivee` was successfully placed in the square, `false` if a collision occurred */
- def addRobot(arrivee: RobotBody) = {
-   this.occupant = Some(arrivee)
-   true // TODO: replace with a full implementation
- }
+  def addRobot(arrivee: RobotBody) = {
+    val ok = this.isEmpty
+    if (ok)
+      this.occupant = Some(arrivee)
+    else
+      this.occupant.get.destroy
+    ok
+  }
 
 }
