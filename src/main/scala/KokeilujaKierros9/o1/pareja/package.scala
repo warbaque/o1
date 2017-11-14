@@ -7,5 +7,6 @@ package object pareja {
   // Tämä esimerkkifunktio käsitellään luvussa 9.1.
   def ekaEiIsompi(lukupari: (Int, Int)) = lukupari._1 <= lukupari._2
   def minuuteiksiJaSekunneiksi(x: Int) = (x/60, x%60)
+  def onJarjestyksessa(vec: Vector[Int]) = vec.isEmpty || vec.view.zip(vec.view.tail).forall(ekaEiIsompi)
 
 }

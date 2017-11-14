@@ -6,12 +6,14 @@ import scala.collection.mutable.Map
 
 class Asiakasrekisteri(val nimi: String) {
 
-  private val asiakkaat = Map[Int, Asiakas]() 
+  private val asiakkaat = Map[Int, Asiakas]()
 
   def lisaa(uusiAsiakas: Asiakas) = {
     this.asiakkaat(uusiAsiakas.numero) = uusiAsiakas
   }
 
   def hae(asiakasnumero: Int) = this.asiakkaat.get(asiakasnumero)
-  
+
+  def kuolinvuosi(asiakasnumero: Int) = this.hae(asiakasnumero).flatMap(_.kuollut)
+
 }
