@@ -55,12 +55,12 @@ class Tilanne(val vaariaSallitaan: Int, val arvatut: String, val piilosana: Stri
 
   /** Palauttaa `true` jos arvaaja on arvannut väärin jo enemmän kertoja kuin sallittiin
     * ja on siis hävinnyt pelin; palauttaa `false`, jos näin ei ole. */
-  def onTappio = false // TODO: korvaa toimivalla toteutuksella
+  def onTappio = this.vaariaSallitaan < 0
 
 
   /** Palauttaa `true`, jos arvaaja on voittanut pelin eli ei ole arvannut liian monta kertaa väärin
     * ja kaikki piilosanan kirjaimet ovat näkyvissä; muutoin palauttaa `false`. */
-  def onVoitto = false // TODO: korvaa toimivalla toteutuksella
+  def onVoitto = !this.onTappio && !this.piilosana.contains('_')
 
 
   /** Palauttaa piilosanasta sellaisen version, josta on paljastettu osoitetut merkit. Esimerkiksi
@@ -86,12 +86,11 @@ class Tilanne(val vaariaSallitaan: Int, val arvatut: String, val piilosana: Stri
     * @param arvaus  viimeksi arvattu merkki; voi olla iso tai pieni kirjain, mutta tulkitaan aina isoksi.
     * @return uusi pelitilanne */
   def arvaa(arvaus: Char) = {
-    val arvausIsona = arvaus.toUpper
-    // TODO: poista alla oleva toimimaton koodi ja korvaa se toimivalla toteutuksella
-    val ratkaisu = this.sopivatSanat.head
-    val montako = this.arvatut.length + 1
-    new Tilanne(this.vaariaSallitaan, this.arvatut + arvausIsona, ratkaisu.take(montako) + piilosana.drop(montako), Vector(ratkaisu))
-
+    val chr = arvaus.toUpper
+    val ratkaisut = this.sopivatSanat.groupBy(_.map(c => if(c==chr) chr else '_')).values.toVector.sortBy(-_.size).head
+    val arvaukset = this.arvatut + chr
+    val piilosana = ratkaisut(0).map(c => if(arvaukset.contains(c)) c else '_')
+    new Tilanne(this.vaariaSallitaan - (if(ratkaisut(0).contains(chr)) 0 else 1), arvaukset, piilosana, ratkaisut)
   }
 
 
