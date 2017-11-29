@@ -60,13 +60,14 @@ class Glass(val board: GameBoard, val location: Coords) {
     * of Viinaharava and all the locations of booze glasses are revealed as a result.)
     *
     * @return `true` if the glass was a water glass, `false` if it was a booze glass */
-  def drink() = {
+  def drink(): Boolean = {
     this.isFull = false
     if (this.isWater) {
+      if (this.danger == 0)
+        this.neighbors.filter(o => o.isWater && o.isFull).map(_.drink)
       true
     } else {
-      for (o <- this.board.boozeGlasses)
-        o.isFull = false
+      this.board.boozeGlasses.map(_.isFull = false)
       false
     }
   }
