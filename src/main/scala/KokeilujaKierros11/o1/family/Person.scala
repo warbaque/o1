@@ -22,7 +22,7 @@ class Person(val name: String, val children: Vector[Person]) {
 
   /** Returns the number of descendants the person has in total. A person's
     * descendants are that person's children plus all their descendants. */
-  def numberOfDescendants: Int = ??? // TODO: replace with a working implementation
+  def numberOfDescendants: Int = children.size + children.map(_.numberOfDescendants).sum
 
 
   /** Returns the number of descendants the person has in a particular generation.
@@ -32,7 +32,14 @@ class Person(val name: String, val children: Vector[Person]) {
     * @param generation  a positive number of "steps" that identifies a generation
     * @return the number of descendants that are *exactly* the indicated number of steps
     *         removed from the person in the family tree */
-  def numberOfDescendantsAt(generation: Int): Int = ??? // TODO: replace with a working implementation
+  def numberOfDescendantsAt(generation: Int): Int = {
+    if (generation == 0)
+      0
+    else if (generation == 1)
+      children.size
+    else
+      children.map(_.numberOfDescendantsAt(generation - 1)).sum
+  }
 
 
   /** Returns a string representation of the person. */
